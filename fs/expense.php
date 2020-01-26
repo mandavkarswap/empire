@@ -50,33 +50,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"
   Expense Type *:
   <select name="et">
     <option value="">Select Type</option>
-    <option value="1">other</option>
-    <option value="2">taxes_income</option>
-    <option value="3">taxes_real_estate</option>
-    <option value="4">home_mortage</option>
+    <option value="10">food</option>
+    <option value="27">commute</option>    
+    <option value="16">books</option>
+    <option value="9">clothing</option>
+    <option value="24">medicine</option>
     <option value="5">home_rent</option>
+    <option value="18">phone_bill</option>
+    <option value="17">subscriptions</option>
+    <option value="21">movies</option>
+    <option value="13">cycle</option>
     <option value="6">utilities</option>
+    <option value="4">home_mortage</option>
     <option value="7">maintenance</option>
     <option value="8">insurance</option>
-    <option value="9">clothing</option>
-    <option value="10">food</option>
+    <option value="2">taxes_income</option>
+    <option value="3">taxes_real_estate</option>
     <option value="11">credit_card</option>
     <option value="12">gym</option>
-    <option value="13">cycle</option>
     <option value="14">nutrition</option>
     <option value="15">gifts</option>
-    <option value="16">books</option>
-    <option value="17">subscriptions</option>
-    <option value="18">phone_bill</option>
-    <option value="19">smoke</option>
-    <option value="20">alcohol</option>
-    <option value="21">movies</option>
     <option value="22">concerts</option>
     <option value="23">vacation</option>
-    <option value="24">medicine</option>
     <option value="25">doctor</option>
     <option value="26">equipments</option>
-    <option value="27">commute</option>    
+    <option value="20">alcohol</option>
+    <option value="19">smoke</option>
+    <option value="1">other</option>
   </select>
   <br>
   <br>
