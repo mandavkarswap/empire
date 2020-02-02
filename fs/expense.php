@@ -16,6 +16,7 @@ require_once('config/config.inc.php');
 $page = htmlspecialchars($_SERVER["PHP_SELF"]);
 $expenseTypeId = !empty($_POST["et"]) ? $_POST["et"] : 0;
 $expenseAmount = !empty($_POST["at"]) ? $_POST["at"] : 0;
+$date = !empty($_POST["dt"]) ? $_POST["dt"] . ' 00:00:00' : '';
 $comment = !empty($_POST["ct"]) ? $_POST["ct"] : '';
  "";
 $showAlert = false;
@@ -23,19 +24,25 @@ $showAlert = false;
 if ($_SERVER["REQUEST_METHOD"] == "POST"
     && !empty($expenseTypeId)
     && !empty($expenseAmount)) {
-
-  var_dump($_POST["dt"]);
-  die();
   
   DB::$user = DB_USER;
   DB::$password = DB_PASSWORD;
   DB::$dbName = DB_NAME;
 
-  DB::insert('sw_fs_expenses', array(
-    'type_id' => $expenseTypeId,
-    'amount' => $expenseAmount,
-    'comment' => $comment,
-  ));
+  if (!empty($date)) {
+    DB::insert('sw_fs_expenses', array(
+      'type_id' => $expenseTypeId,
+      'amount' => $expenseAmount,
+      'comment' => $comment,
+      'creation_date' => $date,
+    ));
+  } else {
+    DB::insert('sw_fs_expenses', array(
+      'type_id' => $expenseTypeId,
+      'amount' => $expenseAmount,
+      'comment' => $comment,
+    ));
+  }
 
   if (DB::insertId() > 0) {
     $showAlert = true;
