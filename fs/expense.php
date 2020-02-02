@@ -96,7 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"
   Comment: <input type="text" name="ct" value="<?php echo $email;?>">
   <br>
   <br>
-  <input type="date" name="dt" >
+  Date: <input type="date" name="dt" >
   <br>
   <br>
   <input type="submit" name="submit" value="Submit">  
