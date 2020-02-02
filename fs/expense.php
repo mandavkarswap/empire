@@ -23,6 +23,9 @@ $showAlert = false;
 if ($_SERVER["REQUEST_METHOD"] == "POST"
     && !empty($expenseTypeId)
     && !empty($expenseAmount)) {
+
+  var_dump($_POST["dt"]);
+  die();
   
   DB::$user = DB_USER;
   DB::$password = DB_PASSWORD;
@@ -84,6 +87,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"
   <br>
   <br>
   Comment: <input type="text" name="ct" value="<?php echo $email;?>">
+  <br>
+  <br>
+  <input type="date" name="dt" >
   <br>
   <br>
   <input type="submit" name="submit" value="Submit">  
