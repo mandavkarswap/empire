@@ -5,15 +5,20 @@ Dynamic date
 validation
 */
 require_once('config/config.inc.php');
+
+require_once(DOC_ROOT . '/libs/CommonFunctions.php');
+
 $today = date('Y-m-d', strtotime('today')) . ' 00:00:00';
 $tomorrow = date('Y-m-d', strtotime('tomorrow')) . ' 00:00:00';
-$startOfTheMonth = date('Y-m-01', strtotime('current month')) . ' 00:00:00';
+$startOfTheMonth = date('Y-m-01') . ' 00:00:00';
 $startOfTheNextMonth = date('Y-m-01', strtotime('next month')) . ' 00:00:00';
 
 
 DB::$user = DB_USER;
 DB::$password = DB_PASSWORD;
 DB::$dbName = DB_NAME;
+
+// DB::debugMode();
 
 // [id] => 23
 // [type_id] => 27
@@ -113,57 +118,6 @@ LEFT JOIN sw_expenses_type_master b ON a.type_id=b.id",
             $startOfTheNextMonth
           );
 $monthlyTypeWiseTableHTML = getTableHTML($monthlyTypeWiseTableArr, $resultsMonthlyTypewise);
-
-
-function getTableHTML($headerArr, $tableData) {
-  $html = '';
-
-
-  $html = '<table border=2>' . 
-            generateTableHeader($headerArr) .
-            generateTableBody($headerArr, $tableData) .
-          '</table>';
-
-  return $html;
-}
-
-function generateTableHeader($headerArr) {
-  $html = '';
-  $htmlArr = array();
-  $htmlArr[] = '<thead>';
-  foreach ($headerArr as $tableHeader) {
-      $htmlArr[] = '<th>' . $tableHeader['viewcol'] . '</th>';
-  }
-
-  $htmlArr[] = '</thead>';
-
-  $html = implode('', $htmlArr);
-
-  return $html;
-}
-
-function generateTableBody($headerArr, $tableData) {
-  $html = '';
-  $htmlArr = array();
-
-  $htmlArr[] = '<tbody>';
-
-  foreach ($tableData as $dbData) {
-    $htmlArr[] = '<tr>';
-
-    foreach ($headerArr as $dbColumn => $tableHeader) {
-      $htmlArr[] = '<td align="' . $tableHeader['align'] . '">' . $dbData[$dbColumn] . '</td>';
-    }
-
-    $htmlArr[] = '</tr>';
-  }
-
-  $htmlArr[] = '</tbody>';
-
-  $html = implode('', $htmlArr);
-
-  return $html;
-}
 ?>
 <!DOCTYPE HTML>
 <html>

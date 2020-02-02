@@ -32,3 +32,15 @@ CREATE TABLE `sw_fs_borrower_master` (
 	`name` VARCHAR(256) NOT NULL,
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
+
+INSERT INTO sw_fs_borrower_master (name)
+values
+('Omkar Phavare'),
+('Sanjana Ghanekar'),
+('Swapnil Desai'),
+('Shailesh Khochare'),
+('Devendra Shelar'),
+('Mrunal Mandavkar'),
+('Rohit Sawant'),
+('Sugandha Mandavkar'),
+('Sandesh Mandavkar');
