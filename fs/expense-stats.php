@@ -25,7 +25,7 @@ DB::$dbName = DB_NAME;
 // [amount] => 26
 // [comment] => Home to OG home
 // [creation_date] => 2020-01-26 13:05:31
-// [updation_date] => 0000-00-00 00:00:00
+// [updation_date] => 0000-00-00 00:00:2020-01-20
 // [name] => commute
 $dailyTableArr = array(
               'name' => array(
@@ -100,7 +100,8 @@ $resultsMonthly = DB::query("
 SELECT a.id, a.type_id, a.amount, a.comment, DATE(a.creation_date) as creation_date, b.name FROM sw_fs_expenses a
 LEFT JOIN sw_expenses_type_master b ON a.type_id = b.id
 WHERE a.creation_date >=%s
-AND a.creation_date <%s;",
+AND a.creation_date <%s
+ORDER BY creation_date DESC;",
             $startOfTheMonth,
             $startOfTheNextMonth
           );
