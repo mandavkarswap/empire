@@ -28,6 +28,10 @@ $tableArr = array(
                       'viewcol' => 'Return Date',
                       'align' => 'left'
                       ),
+              'last_payment_date' => array(
+                      'viewcol' => 'Recent Payment Date',
+                      'align' => 'left'
+                      ),
               'comment' => array(
                       'viewcol' => 'Comment',
                       'align' => 'right',
@@ -35,7 +39,7 @@ $tableArr = array(
           );
 
 $result = DB::query("
-SELECT a.id, b.name, a.amount, a.remaining_amount, DATE(a.lending_date) as lending_date, DATE(a.return_date) as return_date, a.comment FROM sw_fs_receivables a
+SELECT a.id, b.name, a.amount, a.remaining_amount, DATE(a.lending_date) as lending_date, DATE(a.return_date) as return_date, DATE(a.updation_date) as last_payment_date, a.comment FROM sw_fs_receivables a
 LEFT JOIN sw_fs_borrower_master b ON a.borrower_id = b.id
 WHERE a.is_paid=0;"
           );

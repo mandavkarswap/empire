@@ -1,6 +1,7 @@
 <?php
 require_once('config/config.inc.php');
 
+require_once(DOC_ROOT . '/libs/CommonFunctions.php');
 
 // define variables and set to empty values
 $page = htmlspecialchars($_SERVER["PHP_SELF"]);
@@ -16,21 +17,25 @@ DB::$password = DB_PASSWORD;
 DB::$dbName = DB_NAME;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (!empty($borrowerId)
-        && !empty($borrowedAmount)) {
+    if (!empty($receivableId)
+        && !empty($returnedAmount)) {
+
+    $result = DB::query("CALL sp_sw_fs_insert_receivable_payback(%s, %s, %s, %s)",
+      $receivableId,
+      $returnedAmount,
+      $date,
+      $comment
+    );
+  
+    // echo "<pre>";
+    // print_r($result);
+    // die();
+  
+    // TODO : Need validation
+    // if (DB::insertId() > 0) {
     
-
-    DB::insert('sw_fs_receivables', array(
-      'borrower_id' => $borrowerId,
-      'amount' => $borrowedAmount,
-      'lending_date' => $borrowDate,
-      'return_date' => $returnDate,
-      'comment' => $comment,
-    ));
-
-    if (DB::insertId() > 0) {
-      $showAlert = true;
-    }
+    $showAlert = true;
+    // }
 
     // TODO : validate
     // TODO : class structure
@@ -39,30 +44,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     echo "err1";
     die();
   }
-} else {
+}
 
-  $result = DB::query("
+// Populate receivables
+$result = DB::query("
 SELECT a.id, b.name, a.amount FROM sw_fs_receivables a
 LEFT JOIN sw_fs_borrower_master b ON a.borrower_id = b.id
 WHERE a.is_paid=0;"
-  );
+);
 
+if (!empty($result)) {
+  $optList = array();
 
-  if (!empty($result)) {
-    $optList = array();
-
-    foreach ($result as $receivableInfo) {
-      $optList[$receivableInfo['id']] = $receivableInfo['name'] . ' (' . $receivableInfo['amount'] . ')';
-    }
+  foreach ($result as $receivableInfo) {
+    $optList[$receivableInfo['id']] = $receivableInfo['name'] . ' (' . $receivableInfo['amount'] . ')';
   }
-  // echo '<pre>';
-  // print_r($optList);
-  // die();
+}
+// echo '<pre>';
+// print_r($optList);
+// die();
 
-  $htmlOption = '';
-  if (!empty($optList)) {
-    $htmlOption = getSelectOptions($optList);    
-  }
+$htmlOption = '';
+if (!empty($optList)) {
+  $htmlOption = getSelectOptions($optList);    
 }
 ?>
 <!DOCTYPE HTML>
@@ -80,7 +84,7 @@ WHERE a.is_paid=0;"
 <p><span class="error">* required field</span></p>
 <form method="post" action="<?php $page;?>">  
   Receivable *:<select name="reid">
-    <option value="">Select Borrower</option>
+    <option value="">Select Receivable</option>
     <?php echo $htmlOption;?>
   </select>
   <br>
