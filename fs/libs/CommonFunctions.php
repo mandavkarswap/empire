@@ -1,4 +1,17 @@
 <?php
+function getSelectOptions($optArr) {
+  $optStr = '';
+  $tmpArr = array();
+
+  foreach ($optArr as $optKey => $optVal) {
+    $tmpArr[] = '<option value="' . $optKey . '">' . $optVal . '</option>';
+  }
+
+  $optStr = implode('', $tmpArr);
+
+  return $optStr;
+}
+
 function getTableHTML($headerArr, $tableData) {
   $html = '';
 
