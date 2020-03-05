@@ -8,10 +8,25 @@ require_once('config/config.inc.php');
 
 require_once(DOC_ROOT . '/libs/CommonFunctions.php');
 
+$page = htmlspecialchars($_SERVER["PHP_SELF"]);
 $today = date('Y-m-d', strtotime('today')) . ' 00:00:00';
 $tomorrow = date('Y-m-d', strtotime('tomorrow')) . ' 00:00:00';
 $startOfTheMonth = date('Y-m-01') . ' 00:00:00';
 $startOfTheNextMonth = date('Y-m-01', strtotime('next month')) . ' 00:00:00';
+
+if (!empty($_POST)) {
+  if (!empty($_POST['mt'])) {
+    $yearMonth = $_POST['mt'] . '-';
+    $today = $yearMonth . '01' . ' 00:00:00';
+    $tomorrow = $yearMonth . '02' . ' 00:00:00';
+    $startOfTheMonth = $yearMonth . '01' . ' 00:00:00';
+    $currMonth = explode('-', $yearMonth)[1];
+    $currYear = explode('-', $yearMonth)[0];
+    $nextMonth = $currMonth < 12 ? $currMonth + 1 : 1;
+    $nextMonth = $nextMonth < 10 ? '0'. $nextMonth : $nextMonth;
+    $startOfTheNextMonth = $currYear . '-' . $nextMonth . '-' . '01' . ' 00:00:00';
+  }
+}
 
 
 DB::$user = DB_USER;
@@ -131,15 +146,22 @@ $monthlyTypeWiseTableHTML = getTableHTML($monthlyTypeWiseTableArr, $resultsMonth
 </head>
 <body>
 <center>
-<h1>Expense Stats</h2>
-<?php
-  echo "<h4>Daily</h4>";
-  echo $dailyTableHTML;
-  echo "<h4>Monthly</h4>";
-  echo $monthlyTableHTML;
-  echo "<h4>Monthly TypeWise</h4>";
-  echo $monthlyTypeWiseTableHTML;
-?>
+  <form method="post" action="<?php $page;?>">  
+    Month: <input type="month" name="mt" >
+    <input type="submit" name="submit" value="Submit">  
+  </form>
+
+  <h1>Expense Stats</h2>
+  <?php
+    if (empty($_POST['mt'])) {
+      echo "<h4>Daily</h4>";
+      echo $dailyTableHTML;
+    }
+    echo "<h4>Monthly</h4>";
+    echo $monthlyTableHTML;
+    echo "<h4>Monthly TypeWise</h4>";
+    echo $monthlyTypeWiseTableHTML;
+  ?>
 </center>
 </body>
 </html>
