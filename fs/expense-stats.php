@@ -1,7 +1,6 @@
 <?php
 /**
 TODO : 
-Dynamic date
 validation
 */
 require_once('config/config.inc.php');
@@ -78,6 +77,10 @@ $monthlyTableArr = array(
                       'viewcol' => 'Amount',
                       'align' => 'right'
                       ),
+            'comment' => array(
+                      'viewcol' => 'Comment',
+                      'align' => 'right',
+                      )
           );
 
 // [typeName] => food
@@ -164,4 +167,4 @@ $monthlyTypeWiseTableHTML = getTableHTML($monthlyTypeWiseTableArr, $resultsMonth
   ?>
 </center>
 </body>
-</html>
+</html> 
