@@ -1,5 +1,6 @@
 <?php
 require_once('config/config.inc.php');
+require_once(DOC_ROOT . '/libs/CommonFunctions.php');
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -21,13 +22,14 @@ $comment = !empty($_POST["ct"]) ? $_POST["ct"] : '';
  "";
 $showAlert = false;
 
+DB::$user = DB_USER;
+DB::$password = DB_PASSWORD;
+DB::$dbName = DB_NAME;
+
 if ($_SERVER["REQUEST_METHOD"] == "POST"
     && !empty($expenseTypeId)
     && !empty($expenseAmount)) {
   
-  DB::$user = DB_USER;
-  DB::$password = DB_PASSWORD;
-  DB::$dbName = DB_NAME;
 
   if (!empty($date)) {
     DB::insert('sw_fs_expenses', array(
@@ -52,6 +54,66 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"
   // TODO : class structure
   // TODO : select for expense type master
 }
+
+// Populate expeses
+$result = DB::query("
+SELECT id, name FROM sw_expenses_type_master;
+");
+
+if (!empty($result)) {
+
+  $priorityArr = array(
+                '10',//food
+                '27',//commute
+                '16',//books
+                '9',//clothing
+                '24',//medicine
+                '5',//home_rent
+                '18',//phone_bill
+                '17',//subscriptions
+                '21',//movies
+                '13',//cycle
+                '6',//utilities
+                '4',//home_mortage
+                '7',//maintenance
+                '8',//insurance
+                '2',//taxes_income
+                '3',//taxes_real_estate
+                '11',//credit_card
+                '12',//gym
+                '14',//nutrition
+                '15',//gifts
+                '22',//concerts
+                '23',//vacation
+                '25',//doctor
+                '26',//equipments
+                // '20',//alcohol // These were commented just to show that priority sorting works
+                // '19',//smoke
+                // '1',//other
+            );
+  $optList = array();
+  foreach ($result as $expenseTypeInfo) {
+    $optList[$expenseTypeInfo['id']] = $expenseTypeInfo['name'];
+  }
+
+  // $optList should always contain more records than $priorityArr
+  $diff = array_diff(array_keys($optList), $priorityArr);
+  // echo "<pre>";
+  // print_r($diff);
+  // die();
+  // This way priority expense ids always get lowest index
+  $sortedList = array_merge($priorityArr, $diff);
+
+  $sortedOptList = array();
+  foreach ($sortedList as $expenseId) {
+    $sortedOptList[$expenseId] = $optList[$expenseId];
+  }
+}
+
+$htmlOption = '';
+if (!empty($sortedOptList)) {
+  $htmlOption = getSelectOptions($sortedOptList);    
+}
 ?>
 
 <h2>Expense</h2>
@@ -60,33 +122,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"
   Expense Type *:
   <select name="et">
     <option value="">Select Type</option>
-    <option value="10">food</option>
-    <option value="27">commute</option>    
-    <option value="16">books</option>
-    <option value="9">clothing</option>
-    <option value="24">medicine</option>
-    <option value="5">home_rent</option>
-    <option value="18">phone_bill</option>
-    <option value="17">subscriptions</option>
-    <option value="21">movies</option>
-    <option value="13">cycle</option>
-    <option value="6">utilities</option>
-    <option value="4">home_mortage</option>
-    <option value="7">maintenance</option>
-    <option value="8">insurance</option>
-    <option value="2">taxes_income</option>
-    <option value="3">taxes_real_estate</option>
-    <option value="11">credit_card</option>
-    <option value="12">gym</option>
-    <option value="14">nutrition</option>
-    <option value="15">gifts</option>
-    <option value="22">concerts</option>
-    <option value="23">vacation</option>
-    <option value="25">doctor</option>
-    <option value="26">equipments</option>
-    <option value="20">alcohol</option>
-    <option value="19">smoke</option>
-    <option value="1">other</option>
+    <?php echo $htmlOption;?> 
   </select>
   <br>
   <br>
