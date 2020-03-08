@@ -3,8 +3,6 @@
 Interface to insert Notes Payable
   Lists Loaner
   Inserts Note Payable 
-  TODO :
-  Table needs new column, amount remaining
 */
 require_once('config/config.inc.php');
 require_once(DOC_ROOT . '/libs/CommonFunctions.php');
@@ -34,6 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       'loaner_id' => $loanerId,
       'amount' => $loanedAmount,
       'amount_payable' => $amountPayable,
+      'remaining_amount' => $amountPayable,
       'lending_date' => $loanDate,
       'return_date' => $returnDate,
       'comment' => $comment,

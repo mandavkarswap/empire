@@ -20,6 +20,7 @@ CREATE TABLE `sw_fs_notes_payable` (
 	`loaner_id` MEDIUMINT(8) unsigned NOT NULL,
 	`amount` MEDIUMINT(8) unsigned NOT NULL,
 	`amount_payable` MEDIUMINT(8) unsigned NOT NULL,
+	`remaining_amount` mediumint(8) unsigned NOT NULL,
 	`lending_date` DATETIME NOT NULL,
 	`return_date` DATETIME NOT NULL,
 	`is_paid` TINYINT(1) unsigned DEFAULT '0' COMMENT '1 => Paid, 0=> Remaining',
