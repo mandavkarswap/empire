@@ -54,7 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <h2>Receivables</h2>
 <p><span class="error">* required field</span></p>
-<form method="post" action="<?php $page;?>">  
+<form method="post" action="<?php echo $page;?>">  
   Borrower *:<select name="bn">
     <option value="">Select Borrower</option>
     <option value="1">Omkar Phavare</option>
