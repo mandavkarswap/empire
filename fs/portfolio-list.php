@@ -17,12 +17,16 @@ DB::$dbName = DB_NAME;
 $pageName = 'Stock Portfolio';
 
 $tableArr = array(
-              'Stock' => array(
+              'name' => array(
                       'viewcol' => 'Name',
                       'align' => 'left',
                       ),
               'quantity' => array(
                       'viewcol' => 'Quantity',
+                      'align' => 'right',
+                      ),
+              'effective_price' => array(
+                      'viewcol' => 'ePrice',
                       'align' => 'right',
                       ),
               'transaction_cost' => array(
@@ -32,10 +36,8 @@ $tableArr = array(
           );
 
 $result = DB::query("
-SELECT a.id, b.name, a.quantity, a.transaction_cost FROM sw_fs_stock_transaction_master a
-LEFT JOIN sw_fs_stock_master b ON a.stock_id = b.id
-WHERE a.transaction_type='b';"
-          );
+SELECT b.name, a.quantity, SUM(a.transaction_cost) as transaction_cost, (a.transaction_cost/a.quantity) as effective_price FROM sw_fs_stock_transaction_master a LEFT JOIN sw_fs_stock_master b ON a.stock_id = b.id WHERE a.transaction_type='b' GROUP BY name;
+");
 
 $tableHTML = getTableHTML($tableArr, $result);
 ?>
