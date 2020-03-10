@@ -7,6 +7,12 @@ $moduels = array(
 							'Expense Stats' => '/expense-stats.php',
 							'Insert Expense Type' => '/expense-type.php',
 						),
+			'Stocks' => array(
+							'Stock Order' => '/stock.php',
+							'Insert New Stock' => '/insert-stock.php',
+							'View Portfolio' => '/portfolio-list.php',
+						),
+
 			'Receivables' => array(
 							'Insert Receivables' => '/receivables.php',
 							'Receivables List' => '/receivables-list.php',
