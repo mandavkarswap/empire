@@ -1,6 +1,7 @@
 <?php
 require_once('config/config.inc.php');
 
+require_once(DOC_ROOT . '/libs/CommonFunctions.php');
 
 // define variables and set to empty values
 $page = htmlspecialchars($_SERVER["PHP_SELF"]);
