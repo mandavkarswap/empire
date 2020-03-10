@@ -28,19 +28,20 @@ CREATE TABLE `sw_fs_receivable_returns` (
 
 -- borrower
 CREATE TABLE `sw_fs_borrower_master` (
-	`id` MEDIUMINT unsigned NOT NULL AUTO_INCREMENT,
-	`name` VARCHAR(256) NOT NULL,
-	PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB
 
-INSERT INTO sw_fs_borrower_master (name)
-values
-('Omkar Phavare'),
-('Sanjana Ghanekar'),
-('Swapnil Desai'),
-('Shailesh Khochare'),
-('Devendra Shelar'),
-('Mrunal Mandavkar'),
-('Rohit Sawant'),
-('Sugandha Mandavkar'),
-('Sandesh Mandavkar');
+-- Insert new borrower
+DROP PROCEDURE IF EXISTS `sp_sw_fs_insert_new_borrower`;
+CREATE PROCEDURE `sp_sw_fs_insert_new_borrower`(
+    arg_borrower_name varchar(100)
+)
+BEGIN
+
+	INSERT IGNORE INTO sw_fs_borrower_master(name) values(arg_borrower_name);
+
+	SELECT LAST_INSERT_ID() as new_borrower_id;
+END
