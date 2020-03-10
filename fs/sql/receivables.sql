@@ -27,6 +27,7 @@ CREATE TABLE `sw_fs_receivable_returns` (
 ) ENGINE=InnoDB;
 
 -- borrower
+-- TODO : Add is active column
 CREATE TABLE `sw_fs_borrower_master` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,

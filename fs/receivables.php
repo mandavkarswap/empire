@@ -12,13 +12,13 @@ $comment = !empty($_POST["ct"]) ? $_POST["ct"] : '';
  "";
 $showAlert = false;
 
+DB::$user = DB_USER;
+DB::$password = DB_PASSWORD;
+DB::$dbName = DB_NAME;
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!empty($borrowerId)
         && !empty($borrowedAmount)) {
-    
-    DB::$user = DB_USER;
-    DB::$password = DB_PASSWORD;
-    DB::$dbName = DB_NAME;
 
     DB::insert('sw_fs_receivables', array(
       'borrower_id' => $borrowerId,
@@ -40,6 +40,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     die();
   }
 }
+
+// Populate Borrowers
+$result = DB::query("
+SELECT id, name FROM sw_fs_borrower_master;
+");
+
+if (!empty($result)) {
+  $optList = array();
+  foreach ($result as $borrowerInfo) {
+    $optList[$borrowerInfo['id']] = ucwords($borrowerInfo['name']);
+  }
+}
+
+$htmlOption = '';
+if (!empty($optList)) {
+  $htmlOption = getSelectOptions($optList);    
+}
+
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -57,22 +75,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <form method="post" action="<?php echo $page;?>">  
   Borrower *:<select name="bn">
     <option value="">Select Borrower</option>
-    <option value="1">Omkar Phavare</option>
-    <option value="2">Sanjana Ghanekar</option>
-    <option value="3">Swapnil Desai</option>
-    <option value="4">Shailesh Khochare</option>
-    <option value="5">Devendra Shelar</option>
-    <option value="6">Rohit Sawant</option>
-    <option value="7">Mrunal Mandavkar</option>
-    <option value="8">Sugandha Mandavkar</option>
-    <option value="9">Sandesh Mandavkar</option>
+    <?php echo $htmlOption;?>
   </select>
   <br>
   <br>
-  Amount *: <input type="text" name="at" value="<?php echo $email;?>">
+  Amount *: <input type="text" name="at">
   <br>
   <br>
-  Comment: <input type="text" name="ct" value="<?php echo $email;?>">
+  Comment: <input type="text" name="ct">
   <br>
   <br>
   Borrow Date: <input type="date" name="bdt">
