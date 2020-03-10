@@ -7,4 +7,19 @@ ALTER TABLE sw_expenses_type_master
 UNIQUE (name);
 
 
-ALTER TABLE sw_fs_notes_payable ADD COLUMN `remaining_amount` mediumint(8) unsigned NOT NULL AFTER `amount_payable`;
+ALTER TABLE sw_fs_stock_transaction_master
+ADD COLUMN `comment` VARCHAR(256)
+AFTER `transaction_cost`;
+
+
+ALTER TABLE sw_fs_stock_transaction_master
+MODIFY COLUMN `single_share_price` DECIMAL(12,8) unsigned NOT NULL COMMENT 'Without tax, price is when bidded/sold';
+
+ALTER TABLE sw_fs_stock_transaction_master
+MODIFY COLUMN `single_share_price` DECIMAL(12,8) unsigned NOT NULL COMMENT 'Without tax, price is when bidded/sold';
+
+ALTER TABLE sw_fs_stock_transaction_master
+MODIFY COLUMN `effective_single_share_price` DECIMAL(12,8) unsigned NOT NULL COMMENT 'With tax being distributed among all share equally';
+
+ALTER TABLE sw_fs_stock_transaction_master
+MODIFY COLUMN `transaction_cost` DECIMAL(12,8) unsigned NOT NULL COMMENT 'Total cost of this transaction including all possible taxes';
