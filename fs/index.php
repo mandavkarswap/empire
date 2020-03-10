@@ -9,6 +9,7 @@ $moduels = array(
 						),
 			'Stocks' => array(
 							'Stock Order' => '/stock.php',
+							'Stock Order List' => '/stock-order-list.php',
 							'Insert New Stock' => '/insert-stock.php',
 							'View Portfolio' => '/portfolio-list.php',
 						),
