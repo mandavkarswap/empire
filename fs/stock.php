@@ -159,7 +159,7 @@
       window.alert('Stock Recorded !!');
 
       // Confirm form resubmit issue
-      // window.location.href = "<?php echo $page;?>";
+      window.location.href = "<?php echo $page;?>";
     </script>
   <?php
     }
