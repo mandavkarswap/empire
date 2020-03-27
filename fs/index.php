@@ -24,11 +24,11 @@ $moduels = array(
 							'Insert Notes Payable' => '/notes-payable.php',
 							'Notes Payable List' => '/notes-payable-list.php',
 							'Payable Notes Paid' => '/notes-payable-paid.php',
+							'Insert Loaner' => '/insert-loaner.php',
 						),
 			'Income' => array(
 							'Insert Income' => '/income.php',
 							'List Income' => '/income-list.php',
-							'Insert Loaner' => '/insert-loaner.php',
 							'Insert Income Type' => '/insert-income-type.php',
 						),
 		);

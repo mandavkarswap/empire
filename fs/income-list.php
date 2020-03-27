@@ -35,10 +35,19 @@ $tableArr = array(
                       )
           );
 
+// Results
+// $result = DB::query("
+// SELECT a.id, b.type, a.amount, DATE(a.date) as date, a.comment FROM sw_fs_income_transaction_master a
+// LEFT JOIN sw_fs_income_type_master b ON a.income_id = b.id ORDER BY a.date DESC;"
+//           );
+
+// UNION ftw for total line :D :D :D
 $result = DB::query("
-SELECT a.id, b.type, a.amount, DATE(a.date) as date, a.comment FROM sw_fs_income_transaction_master a
-LEFT JOIN sw_fs_income_type_master b ON a.income_id = b.id;"
-          );
+(SELECT a.id, b.type, a.amount, DATE(a.date) as date, a.comment FROM sw_fs_income_transaction_master a
+LEFT JOIN sw_fs_income_type_master b ON a.income_id = b.id ORDER BY a.date DESC)
+UNION
+(SELECT \"-\" AS id, \"Total\" AS type, SUM(amount) AS amount, \"-\" AS date, \"-\" AS comment from sw_fs_income_transaction_master);
+");
 
 $tableHTML = getTableHTML($tableArr, $result);
 ?>
