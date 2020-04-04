@@ -12,14 +12,23 @@ function getSelectOptions($optArr) {
   return $optStr;
 }
 
-function getTableHTML($headerArr, $tableData) {
+function getTableHTML($headerArr, $tableData, $tableId='') {
   $html = '';
 
+  if (!empty($tableId)) {
 
-  $html = '<table border=2>' . 
-            generateTableHeader($headerArr) .
-            generateTableBody($headerArr, $tableData) .
-          '</table>';
+    $html = '<table id="' . $tableId . '" border=2>' . 
+              generateTableHeader($headerArr) .
+              generateTableBody($headerArr, $tableData) .
+            '</table>';
+  } else {
+
+    $html = '<table border=2>' . 
+              generateTableHeader($headerArr) .
+              generateTableBody($headerArr, $tableData) .
+            '</table>';
+  }
+
 
   return $html;
 }

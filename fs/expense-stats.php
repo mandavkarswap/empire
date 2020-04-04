@@ -104,8 +104,8 @@ AND a.creation_date <%s;",
             $today,
             $tomorrow
           );
-
-$dailyTableHTML = getTableHTML($dailyTableArr, $resultsDaily);
+$tableId = 'daily';
+$dailyTableHTML = getTableHTML($dailyTableArr, $resultsDaily, $tableId);
 
 // [id] => 1
 // [type_id] => 10
@@ -123,7 +123,8 @@ ORDER BY creation_date DESC;",
             $startOfTheMonth,
             $startOfTheNextMonth
           );
-$monthlyTableHTML = getTableHTML($monthlyTableArr, $resultsMonthly);
+$tableId = 'monthly';
+$monthlyTableHTML = getTableHTML($monthlyTableArr, $resultsMonthly, $tableId);
 
 $resultsMonthlyTypewise = DB::query("
 SELECT b.name as typeName, a.totalExpense from (
@@ -136,13 +137,30 @@ LEFT JOIN sw_expenses_type_master b ON a.type_id=b.id",
             $startOfTheMonth,
             $startOfTheNextMonth
           );
-$monthlyTypeWiseTableHTML = getTableHTML($monthlyTypeWiseTableArr, $resultsMonthlyTypewise);
+$tableId = 'monthlytype';
+$monthlyTypeWiseTableHTML = getTableHTML($monthlyTypeWiseTableArr, $resultsMonthlyTypewise, $tableId);
 ?>
 <!DOCTYPE HTML>
 <html>
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+
   <title>Expense Stats | FS</title>
+
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+  <!-- Bootstrap core CSS -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <!-- Material Design Bootstrap -->
+  <link href="css/mdb.min.css" rel="stylesheet">
+  <!-- Your custom styles (optional) -->
+  <link href="css/style.css" rel="stylesheet">
+
 <style>
 .error {color: #FF0000;}
 </style>
@@ -166,5 +184,22 @@ $monthlyTypeWiseTableHTML = getTableHTML($monthlyTypeWiseTableArr, $resultsMonth
     echo $monthlyTypeWiseTableHTML;
   ?>
 </center>
+
+  <!-- jQuery -->
+  <script type="text/javascript" src="js/jquery.min.js"></script>
+  <!-- Bootstrap tooltips -->
+  <script type="text/javascript" src="js/popper.min.js"></script>
+  <!-- Bootstrap core JavaScript -->
+  <script type="text/javascript" src="js/bootstrap.min.js"></script>
+  <!-- MDB core JavaScript -->
+  <script type="text/javascript" src="js/mdb.min.js"></script>
+  <!-- Your custom scripts (optional) -->
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('#daily').DataTable();
+      $('#monthly').DataTable();
+      $('#monthlytype').DataTable();
+    });
+  </script>
 </body>
 </html> 
