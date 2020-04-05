@@ -145,58 +145,40 @@ $monthlyTypeWiseTableHTML = getTableHTML($monthlyTypeWiseTableArr, $resultsMonth
 <head>
   <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
 
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <?php echo getPageMeta();?>
 
   <title>Expense Stats | FS</title>
 
-
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
-  <!-- Bootstrap core CSS -->
-  <link href="css/bootstrap.min.css" rel="stylesheet">
-  <!-- Material Design Bootstrap -->
-  <link href="css/mdb.min.css" rel="stylesheet">
-  <!-- Your custom styles (optional) -->
-  <link href="css/style.css" rel="stylesheet">
-
-  <link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet">
-
+  <?php echo getPageCss();?>
 
 <style>
 .error {color: #FF0000;}
 </style>
 </head>
 <body>
-<center>
-  <form method="post" action="<?php $page;?>">  
-    Month: <input type="month" name="mt" >
-    <input type="submit" name="submit" value="Submit">  
-  </form>
+<div class="container">
+  
+  <center>
+    <form method="post" action="<?php $page;?>">  
+      Month: <input type="month" name="mt" >
+      <input type="submit" name="submit" value="Submit">  
+    </form>
 
-  <h1>Expense Stats</h2>
-  <?php
-    if (empty($_POST['mt'])) {
-      echo "<h4>Daily</h4>";
-      echo $dailyTableHTML;
-    }
-    echo "<h4>Monthly</h4>";
-    echo $monthlyTableHTML;
-    echo "<h4>Monthly TypeWise</h4>";
-    echo $monthlyTypeWiseTableHTML;
-  ?>
-</center>
+    <h1>Expense Stats</h1>
+    <?php
+      if (empty($_POST['mt'])) {
+        echo "<h4>Daily</h4>";
+        echo $dailyTableHTML;
+      }
+      echo "<h4>Monthly</h4>";
+      echo $monthlyTableHTML;
+      echo "<h4>Monthly TypeWise</h4>";
+      echo $monthlyTypeWiseTableHTML;
+    ?>
+  </center>
 
-  <!-- jQuery -->
-  <script type="text/javascript" src="js/jquery.min.js"></script>
-  <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
-  <!-- Bootstrap tooltips -->
-  <script type="text/javascript" src="js/popper.min.js"></script>
-  <!-- Bootstrap core JavaScript -->
-  <script type="text/javascript" src="js/bootstrap.min.js"></script>
-  <!-- MDB core JavaScript -->
-  <script type="text/javascript" src="js/mdb.min.js"></script>
+  <?php echo getPageJS();?>
+
   <!-- Your custom scripts (optional) -->
   <script type="text/javascript">
     $(document).ready(function(){
@@ -211,5 +193,6 @@ $monthlyTypeWiseTableHTML = getTableHTML($monthlyTypeWiseTableArr, $resultsMonth
       });
     });
   </script>
+</div>
 </body>
 </html> 

@@ -52,25 +52,41 @@ SELECT a.id, b.name, a.amount, a.amount_payable, a.remaining_amount, DATE(a.lend
 LEFT JOIN sw_fs_loaner_master b ON a.loaner_id = b.id
 WHERE a.is_paid=0;"
           );
-
-$tableHTML = getTableHTML($tableArr, $result);
+$tableId = 'notespay';
+$tableHTML = getTableHTML($tableArr, $result, $tableId);
 ?>
 <!DOCTYPE HTML>
 <html>
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <?php echo getPageMeta();?>
   <title><?php echo $pageName; ?> | FS</title>
+  <?php echo getPageCss();?>
+
 <style>
 .error {color: #FF0000;}
 </style>
 </head>
 <body>
-<center>
-<h1><?php echo $pageName; ?></h2>
-<?php
-  echo "<h4>All Loaners</h4>";
-  echo $tableHTML;
-?>
-</center>
+<div class="container">
+  <center>
+  <h1><?php echo $pageName; ?></h2>
+  <?php
+    echo "<h4>All Loaners</h4>";
+    echo $tableHTML;
+  ?>
+  </center>
+
+  <?php echo getPageJS();?>
+
+  <!-- Your custom scripts (optional) -->
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('#notespay').DataTable({
+            paging: true
+      });
+    });
+  </script>
+</div>
 </body>
 </html>

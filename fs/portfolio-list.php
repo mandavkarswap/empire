@@ -45,24 +45,42 @@ UNION
 (SELECT 'Total' AS name, SUM(quantity) AS quantity, SUM(transaction_cost) as transaction_cost, '-' as effective_price FROM sw_fs_stock_transaction_master WHERE transaction_type='b');
 ");
 
-$tableHTML = getTableHTML($tableArr, $result);
+$tableId = 'portfolio';
+$tableHTML = getTableHTML($tableArr, $result, $tableId);
 ?>
 <!DOCTYPE HTML>
 <html>
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <?php echo getPageMeta();?>
+
   <title><?php echo $pageName; ?> | FS</title>
+
+  <?php echo getPageCss();?>
+
 <style>
 .error {color: #FF0000;}
 </style>
 </head>
 <body>
-<center>
-<h1><?php echo $pageName; ?></h2>
-<?php
-  echo "<h4>All Stocks</h4>";
-  echo $tableHTML;
-?>
-</center>
+<div class="container">
+  <center>
+  <h1><?php echo $pageName; ?></h1>
+  <?php
+    echo "<h4>All Stocks</h4>";
+    echo $tableHTML;
+  ?>
+  </center>
+  <?php echo getPageJS();?>
+
+  <!-- Your custom scripts (optional) -->
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('#portfolio').DataTable({
+            paging: true
+      });
+    });
+  </script>
+</div>
 </body>
 </html>

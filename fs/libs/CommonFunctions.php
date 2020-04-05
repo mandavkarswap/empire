@@ -12,6 +12,52 @@ function getSelectOptions($optArr) {
   return $optStr;
 }
 
+function getPageCss() {
+
+  $css = <<<PAGE_CSS
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+<!-- Bootstrap core CSS -->
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<!-- Material Design Bootstrap -->
+<link href="css/mdb.min.css" rel="stylesheet">
+<!-- Your custom styles (optional) -->
+<link href="css/style.css" rel="stylesheet">  
+
+<link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet">
+PAGE_CSS;
+
+  return $css; 
+}
+
+function getPageMeta() {
+
+  $meta = <<<PAGE_META
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+PAGE_META;
+
+  return $meta;
+}
+
+function getPageJS() {
+
+  $js = <<<PAGE_JS
+    <!-- jQuery -->
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="js/popper.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="js/mdb.min.js"></script>
+PAGE_JS;
+
+  return $js; 
+}
+
 function getTableHTML($headerArr, $tableData, $tableId='') {
   $html = '';
 

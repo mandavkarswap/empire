@@ -49,24 +49,38 @@ UNION
 (SELECT \"-\" AS id, \"Total\" AS type, SUM(amount) AS amount, \"-\" AS date, \"-\" AS comment from sw_fs_income_transaction_master);
 ");
 
-$tableHTML = getTableHTML($tableArr, $result);
+$tableId = 'income';
+$tableHTML = getTableHTML($tableArr, $result, $tableId);
 ?>
 <!DOCTYPE HTML>
 <html>
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <?php echo getPageMeta();?>
   <title><?php echo $pageName; ?> | FS</title>
+  <?php echo getPageCss();?>
 <style>
 .error {color: #FF0000;}
 </style>
 </head>
 <body>
-<center>
-<h1><?php echo $pageName; ?></h2>
-<?php
-  echo "<h4>All Income</h4>";
-  echo $tableHTML;
-?>
-</center>
+<div class="container">
+  <center>
+  <h1><?php echo $pageName; ?></h2>
+  <?php
+    echo "<h4>All Income</h4>";
+    echo $tableHTML;
+  ?>
+  </center>
+  <?php echo getPageJS();?>
+
+  <!-- Your custom scripts (optional) -->
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('#income').DataTable({
+            paging: true
+      });
+    });
+  </script>
+</div>
 </body>
 </html>

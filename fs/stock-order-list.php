@@ -59,24 +59,41 @@ $result = DB::query("
 SELECT b.name, a.quantity, DATE(a.date) as date, a.term_master, a.transaction_type, a.quantity, a.single_share_price, a.effective_single_share_price, a.transaction_cost, a.comment FROM sw_fs_stock_transaction_master a LEFT JOIN sw_fs_stock_master b ON a.stock_id = b.id ORDER BY a.date DESC ;
 ");
 
-$tableHTML = getTableHTML($tableArr, $result);
+$tableId = 'orderlist';
+$tableHTML = getTableHTML($tableArr, $result, $tableId);
 ?>
 <!DOCTYPE HTML>
 <html>
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <?php echo getPageMeta();?>
+
   <title><?php echo $pageName; ?> | FS</title>
+
+  <?php echo getPageCss();?>
 <style>
 .error {color: #FF0000;}
 </style>
 </head>
 <body>
-<center>
-<h1><?php echo $pageName; ?></h2>
-<?php
-  echo "<h4>Stock Orders</h4>";
-  echo $tableHTML;
-?>
-</center>
+<div class="container">
+  <center>
+  <h1><?php echo $pageName; ?></h1>
+  <?php
+    echo "<h4>Stock Orders</h4>";
+    echo $tableHTML;
+  ?>
+  </center>
+  <?php echo getPageJS();?>
+
+  <!-- Your custom scripts (optional) -->
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('#orderlist').DataTable({
+            paging: true
+      });
+    });
+  </script>
+</div>
 </body>
 </html>

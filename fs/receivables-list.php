@@ -44,24 +44,38 @@ LEFT JOIN sw_fs_borrower_master b ON a.borrower_id = b.id
 WHERE a.is_paid=0;"
           );
 
-$tableHTML = getTableHTML($tableArr, $result);
+$tableId = 'receivables';
+$tableHTML = getTableHTML($tableArr, $result, $tableId);
 ?>
 <!DOCTYPE HTML>
 <html>
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <?php echo getPageMeta();?>
   <title>Receivables List | FS</title>
+  <?php echo getPageCss();?>
 <style>
 .error {color: #FF0000;}
 </style>
 </head>
 <body>
-<center>
-<h1>Receivables List</h2>
-<?php
-  echo "<h4>All Borrowers</h4>";
-  echo $tableHTML;
-?>
-</center>
+<div class="container">
+  <center>
+  <h1>Receivables List</h2>
+  <?php
+    echo "<h4>All Borrowers</h4>";
+    echo $tableHTML;
+  ?>
+  </center>
+  <?php echo getPageJS();?>
+
+  <!-- Your custom scripts (optional) -->
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('#receivables').DataTable({
+            paging: true
+      });
+    });
+  </script>
+</div>
 </body>
 </html>
