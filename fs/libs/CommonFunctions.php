@@ -116,3 +116,40 @@ function generateTableBody($headerArr, $tableData) {
 
   return $html;
 }
+
+/**
+ * Function to get results from SP
+ */
+function getResultsFromSP($host='localhost', $user, $password, $db, $query) {
+    $mysqli = new mysqli($host, $user, $password, $db);
+
+    /* check connection */
+    if (mysqli_connect_errno()) {
+        printf("Connect failed: %s\n", mysqli_connect_error());
+        exit();
+    }
+
+    /* execute multi query */
+    $resultSetArr = array();
+    $index = 0;
+    if ($mysqli->multi_query($query)) {
+        do {
+            /* store first result set */
+            if ($result = $mysqli->use_result()) {
+                while ($row = $result->fetch_assoc()) {
+                    $resultSetArr[$index][] = $row;
+                }
+
+                $result->close();
+            }
+            /* print divider */
+            if ($mysqli->more_results()) {
+                $index++;
+            }
+        } while ($mysqli->next_result());
+    }
+
+    /* close connection */
+    $mysqli->close();
+    return $resultSetArr;
+}

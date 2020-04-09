@@ -1,3 +1,6 @@
+-- TODO
+-- Income source vs income type e.g. source is earned eg. of type is passive etc
+
 -- Income Type Master
 CREATE TABLE `sw_fs_income_type_master` (
 	`id` MEDIUMINT(8) unsigned NOT NULL AUTO_INCREMENT,
