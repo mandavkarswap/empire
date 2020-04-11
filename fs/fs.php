@@ -25,17 +25,24 @@ list($earnedIncomeArr,
 	$bankNameInfoArr,
 	$bankTotalArr,
 	$mutualFundInfoArr,
-	$mutualFundTotalArr)
+	$mutualFundTotalArr,
+	$providentFundInfoArr,
+	$providentFundTotalArr,
+	$doodadsInfoArr,
+	$doodadsTotalArr)
 	= parseFSResultSet($resultSetArr);
 
 $bankTotal = !empty($bankTotalArr[0]['amount']) ? $bankTotalArr[0]['amount'] : 0;
 $stockTotal = !empty($stockTotal[0]['total_stock_price']) ? $stockTotal[0]['total_stock_price'] : 0;
 $mutualFundTotal = !empty($mutualFundTotalArr[0]['current_value']) ? $mutualFundTotalArr[0]['current_value'] : 0;
 $receivablesTotal = !empty($receivablesTotalInfoArr[0]['remaining_amount']) ? $receivablesTotalInfoArr[0]['remaining_amount'] : 0;
+$providentFundTotal = !empty($providentFundTotalArr[0]['current_value']) ? $providentFundTotalArr[0]['current_value'] : 0;
 
+$totalAssetArr = $bankTotal + $stockTotal + $mutualFundTotal + $receivablesTotal + $providentFundTotal;
 
-$totalAssetArr = $bankTotal + $stockTotal + $mutualFundTotal + $receivablesTotal;
-
+function numFormat($num) {
+	return number_format(floatval($num));
+}
 
 function parseFSResultSet($result = array()) {
 	$earnedIncomeArr = $result[0];
@@ -52,11 +59,15 @@ function parseFSResultSet($result = array()) {
 	$bankTotalArr = $result[11];
 	$mutualFundInfoArr = $result[12];
 	$mutualFundTotalArr = $result[13];
+	$providentFundInfoArr = $result[14];
+	$providentFundTotalArr = $result[15];
+	$doodadsInfoArr = $result[16];
+	$doodadsTotalArr = $result[17];
 
 	$realEstateNameArr = array();
 	$realEstateTotalArr = array();
 
-	return array($earnedIncomeArr, $totalIncome, $expenseTypeArr, $totalExpense, $stockInfoArr, $stockTotal, $notesPayableArr, $notesPayableTotal, $receivablesNameInfoArr, $receivablesTotalInfoArr, $bankNameInfoArr, $bankTotalArr, $mutualFundInfoArr, $mutualFundTotalArr);
+	return array($earnedIncomeArr, $totalIncome, $expenseTypeArr, $totalExpense, $stockInfoArr, $stockTotal, $notesPayableArr, $notesPayableTotal, $receivablesNameInfoArr, $receivablesTotalInfoArr, $bankNameInfoArr, $bankTotalArr, $mutualFundInfoArr, $mutualFundTotalArr, $providentFundInfoArr, $providentFundTotalArr, $doodadsInfoArr, $doodadsTotalArr);
 }
 ?>
 
@@ -121,7 +132,7 @@ function parseFSResultSet($result = array()) {
 								?>
 								<div class="row">
 									<div class="col-md-10"><?php echo $earnedIncomeDetails['type'];?></div>
-									<div class="col-md-2"><?php echo $earnedIncomeDetails['amount'];?></div>
+									<div class="col-md-2"><?php echo numFormat($earnedIncomeDetails['amount']);?></div>
 								</div>
 								<?php
 									}
@@ -185,7 +196,7 @@ function parseFSResultSet($result = array()) {
 							<div class="col">
 								<div class="row total">
 									<div class="col-md-10">Total Income</div>
-									<div class="col-md-2"><?php echo $totalIncome[0]['amount'];?></div>
+									<div class="col-md-2"><?php echo numFormat($totalIncome[0]['amount']);?></div>
 								</div>
 							</div>
 						</div>
@@ -207,7 +218,7 @@ function parseFSResultSet($result = array()) {
 								?>
 								<div class="row">
 									<div class="col-md-10"><?php echo $expenseType['typeName'];?></div>
-									<div class="col-md-2"><?php echo $expenseType['totalExpense'];?></div>
+									<div class="col-md-2"><?php echo numFormat($expenseType['totalExpense']);?></div>
 								</div>
 								<?php
 									}
@@ -218,7 +229,7 @@ function parseFSResultSet($result = array()) {
 							<div class="col">
 								<div class="row subheader">
 									<div class="col-md-10">Total Expenses</div>
-									<div class="col-md-2"><?php echo $totalExpense[0]['amount'];?></div>
+									<div class="col-md-2"><?php echo numFormat($totalExpense[0]['amount']);?></div>
 								</div>
 							</div>
 						</div>
@@ -226,7 +237,7 @@ function parseFSResultSet($result = array()) {
 							<div class="col">
 								<div class="row subheader">
 									<div class="col-md-10">Net Monthly Cash Flow</div>
-									<div class="col-md-2"><?php echo $totalIncome[0]['amount'] - $totalExpense[0]['amount'];?></div>
+									<div class="col-md-2"><?php echo numFormat($totalIncome[0]['amount'] - $totalExpense[0]['amount']);?></div>
 								</div>	
 							</div>
 						</div>
@@ -336,7 +347,7 @@ function parseFSResultSet($result = array()) {
 								?>
 								<div class="row">
 									<div class="col-md-10">Bank Accounts</div>
-									<div class="col-md-2"><?php echo $bankTotal;?></div>
+									<div class="col-md-2"><?php echo numFormat($bankTotal);?></div>
 								</div>
 								<?php
 									}
@@ -345,7 +356,7 @@ function parseFSResultSet($result = array()) {
 								?>
 								<div class="row">
 									<div class="col-md-10">Stocks</div>
-									<div class="col-md-2"><?php echo $stockTotal;?></div>
+									<div class="col-md-2"><?php echo numFormat($stockTotal);?></div>
 								</div>
 								<?php
 									}
@@ -354,20 +365,25 @@ function parseFSResultSet($result = array()) {
 								?>
 								<div class="row">
 									<div class="col-md-10">Mutual Fund</div>
-									<div class="col-md-2"><?php echo $mutualFundTotal;?></div>
+									<div class="col-md-2"><?php echo numFormat($mutualFundTotal);?></div>
 								</div>
 								<?php
 									}
 								?>
+								<?php if (isset($providentFundTotal)) {
+								?>
 								<div class="row">
 									<div class="col-md-10">Provident Fund</div>
-									<div class="col-md-2">123123</div>
+									<div class="col-md-2"><?php echo numFormat($providentFundTotal);?></div>
 								</div>
+								<?php
+									}
+								?>
 								<?php if (isset($receivablesTotal)) {
 								?>
 								<div class="row">
 									<div class="col-md-10">Receivables</div>
-									<div class="col-md-2"><?php echo $receivablesTotal;?></div>
+									<div class="col-md-2"><?php echo numFormat($receivablesTotal);?></div>
 								</div>
 								<?php
 									}
@@ -385,7 +401,7 @@ function parseFSResultSet($result = array()) {
 								?>
 								<div class="row total">
 									<div class="col-md-10">Total Assets</div>
-									<div class="col-md-2"><?php echo $totalAssetArr;?></div>
+									<div class="col-md-2"><?php echo numFormat($totalAssetArr);?></div>
 								</div>
 								<?php
 									}
@@ -398,42 +414,26 @@ function parseFSResultSet($result = array()) {
 									<div class="col-md-10">Doodads</div>
 									<div class="col-md-2"></div>
 								</div>
+								<?php if (!empty($doodadsInfoArr)) {
+									foreach ($doodadsInfoArr as $doodadsInfo) {
+								?>
 								<div class="row">
-									<div class="col-md-10">MTB</div>
-									<div class="col-md-2">123123</div>
+									<div class="col-md-10"><?php echo $doodadsInfo['name'];?></div>
+									<div class="col-md-2"><?php echo numFormat($doodadsInfo['amount']);?></div>
 								</div>
-								<div class="row">
-									<div class="col-md-10">Hybrid</div>
-									<div class="col-md-2">123123</div>
-								</div>
-								<div class="row">
-									<div class="col-md-10">Laptop</div>
-									<div class="col-md-2">123123</div>
-								</div>
-								<div class="row">
-									<div class="col-md-10">Mp3player</div>
-									<div class="col-md-2">123123</div>
-								</div>
-								<div class="row">
-									<div class="col-md-10">Kindle</div>
-									<div class="col-md-2">123123</div>
-								</div>
-								<div class="row">
-									<div class="col-md-10">GoPro</div>
-									<div class="col-md-2">123123</div>
-								</div>
-								<div class="row">
-									<div class="col-md-10">Gold Coin</div>
-									<div class="col-md-2">123123</div>
-								</div>
-								<div class="row">
-									<div class="col-md-10">Other</div>
-									<div class="col-md-2">123123</div>
-								</div>
+								<?php
+									}
+								}
+								?>
+								<?php if (!empty($doodadsTotalArr)) {
+								?>
 								<div class="row total">
 									<div class="col-md-10">Total Doodads</div>
-									<div class="col-md-2">123123</div>
+									<div class="col-md-2"><?php echo numFormat($doodadsTotalArr[0]['amount']);?></div>
 								</div>
+								<?php
+								}
+								?>
 							</div>
 						</div>
 						<div class="row">
@@ -489,7 +489,7 @@ function parseFSResultSet($result = array()) {
 								?>
 								<div class="row">
 									<div class="col-md-10">Notes Payable</div>
-									<div class="col-md-2"><?php echo $notesPayableTotal[0]['remaining_amount'];?></div>
+									<div class="col-md-2"><?php echo numFormat($notesPayableTotal[0]['remaining_amount']);?></div>
 								</div>
 								<?php
 									}

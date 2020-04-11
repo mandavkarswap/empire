@@ -6,8 +6,8 @@ CREATE TABLE `sw_fs_bank_account_master` (
 	PRIMARY KEY (`id`)
 );
 
--- INSERT IGNORE INTO sw_fs_bank_account_master(name) values('AXIS_915010038096978');
--- INSERT IGNORE INTO sw_fs_bank_account_master(name) values('SBI_32947937234');
+-- INSERT IGNORE INTO sw_fs_bank_account_master(name) values('AXIS_9150XXXXXXXX978');
+-- INSERT IGNORE INTO sw_fs_bank_account_master(name) values('SBI_329XXXX7234');
 
 -- bank account balance log master
 CREATE TABLE `sw_fs_bank_account_balance_log` (

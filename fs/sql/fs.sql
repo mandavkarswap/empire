@@ -40,6 +40,14 @@ LEFT JOIN sw_expenses_type_master b ON a.type_id=b.id;';
 
 	SET @mutualFundTotal = 'CALL sp_sw_fs_select_total_mf_balance();';
 
+	SET @providentFundWiseTotal = 'CALL sp_sw_fs_select_latest_pf_balance();';
+
+	SET @providentFundTotal = 'CALL sp_sw_fs_select_total_pf_balance();';
+
+	SET @doodadNameWiseTotal = 'CALL sp_sw_fs_select_doodads_type_total();';
+
+	SET @doodadTotal = 'CALL sp_sw_fs_select_doodads_total();';
+
 	-- Result Set Income Salary
 	PREPARE stmt FROM @incomeSalary;
 	EXECUTE stmt;
@@ -107,6 +115,26 @@ LEFT JOIN sw_expenses_type_master b ON a.type_id=b.id;';
 
 	-- Result Set Mutual Fund Total
 	PREPARE stmt FROM @mutualFundTotal;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+
+	-- Result Set Provident Fund Wise Total
+	PREPARE stmt FROM @providentFundWiseTotal;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+
+	-- Result Set Provident Fund Total
+	PREPARE stmt FROM @providentFundTotal;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+
+	-- Result Set Doodad Name Wise Total
+	PREPARE stmt FROM @doodadNameWiseTotal;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+
+	-- Result Set Doodad Total
+	PREPARE stmt FROM @doodadTotal;
 	EXECUTE stmt;
 	DEALLOCATE PREPARE stmt;
 END
