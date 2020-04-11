@@ -12,8 +12,30 @@ $pageName = 'Finance Statement';
 $query = "CALL sp_sw_fs_select_fs();";
 $resultSetArr = getResultsFromSP("localhost", DB_USER, DB_PASSWORD, DB_NAME, $query);
 
-list($earnedIncomeArr, $totalIncome, $expenseTypeArr, $totalExpense, $stockInfoArr, $stockTotal)
+list($earnedIncomeArr,
+	$totalIncome,
+	$expenseTypeArr,
+	$totalExpense,
+	$stockInfoArr,
+	$stockTotal,
+	$notesPayableArr,
+	$notesPayableTotal,
+	$receivablesNameInfoArr,
+	$receivablesTotalInfoArr,
+	$bankNameInfoArr,
+	$bankTotalArr,
+	$mutualFundInfoArr,
+	$mutualFundTotalArr)
 	= parseFSResultSet($resultSetArr);
+
+$bankTotal = !empty($bankTotalArr[0]['amount']) ? $bankTotalArr[0]['amount'] : 0;
+$stockTotal = !empty($stockTotal[0]['total_stock_price']) ? $stockTotal[0]['total_stock_price'] : 0;
+$mutualFundTotal = !empty($mutualFundTotalArr[0]['current_value']) ? $mutualFundTotalArr[0]['current_value'] : 0;
+$receivablesTotal = !empty($receivablesTotalInfoArr[0]['remaining_amount']) ? $receivablesTotalInfoArr[0]['remaining_amount'] : 0;
+
+
+$totalAssetArr = $bankTotal + $stockTotal + $mutualFundTotal + $receivablesTotal;
+
 
 function parseFSResultSet($result = array()) {
 	$earnedIncomeArr = $result[0];
@@ -22,8 +44,19 @@ function parseFSResultSet($result = array()) {
 	$totalExpense = $result[3];
 	$stockInfoArr = $result[4];
 	$stockTotal = $result[5];
+	$notesPayableArr = $result[6];
+	$notesPayableTotal = $result[7];
+	$receivablesNameInfoArr = $result[8];
+	$receivablesTotalInfoArr = $result[9];
+	$bankNameInfoArr = $result[10];
+	$bankTotalArr = $result[11];
+	$mutualFundInfoArr = $result[12];
+	$mutualFundTotalArr = $result[13];
 
-	return array($earnedIncomeArr, $totalIncome, $expenseTypeArr, $totalExpense, $stockInfoArr, $stockTotal);
+	$realEstateNameArr = array();
+	$realEstateTotalArr = array();
+
+	return array($earnedIncomeArr, $totalIncome, $expenseTypeArr, $totalExpense, $stockInfoArr, $stockTotal, $notesPayableArr, $notesPayableTotal, $receivablesNameInfoArr, $receivablesTotalInfoArr, $bankNameInfoArr, $bankTotalArr, $mutualFundInfoArr, $mutualFundTotalArr);
 }
 ?>
 
@@ -299,39 +332,64 @@ function parseFSResultSet($result = array()) {
 									<div class="col-md-10">Assets</div>
 									<div class="col-md-2"></div>
 								</div>
+								<?php if (isset($bankTotal)) {
+								?>
 								<div class="row">
 									<div class="col-md-10">Bank Accounts</div>
-									<div class="col-md-2">123123</div>
+									<div class="col-md-2"><?php echo $bankTotal;?></div>
 								</div>
-								<?php if (isset($earnedIncomeArr)) {
+								<?php
+									}
+								?>
+								<?php if (isset($stockTotal)) {
 								?>
 								<div class="row">
 									<div class="col-md-10">Stocks</div>
-									<div class="col-md-2"><?php echo $stockTotal[0]['total_stock_price'];?></div>
+									<div class="col-md-2"><?php echo $stockTotal;?></div>
+								</div>
+								<?php
+									}
+								?>
+								<?php if (isset($mutualFundTotal)) {
+								?>
+								<div class="row">
+									<div class="col-md-10">Mutual Fund</div>
+									<div class="col-md-2"><?php echo $mutualFundTotal;?></div>
 								</div>
 								<?php
 									}
 								?>
 								<div class="row">
-									<div class="col-md-10">Mutual Fund</div>
-									<div class="col-md-2">123123</div>
-								</div>
-								<div class="row">
 									<div class="col-md-10">Provident Fund</div>
 									<div class="col-md-2">123123</div>
 								</div>
+								<?php if (isset($receivablesTotal)) {
+								?>
 								<div class="row">
 									<div class="col-md-10">Receivables</div>
-									<div class="col-md-2">123123</div>
+									<div class="col-md-2"><?php echo $receivablesTotal;?></div>
 								</div>
+								<?php
+									}
+								?>
+								<?php if (isset($realEstateTotalArr)) {
+								?>
 								<div class="row">
 									<div class="col-md-10">Real Estate</div>
-									<div class="col-md-2">123123</div>
+									<div class="col-md-2">##INSERT_VALUE##</div>
 								</div>
+								<?php
+									}
+								?>
+								<?php if (isset($totalAssetArr)) {
+								?>
 								<div class="row total">
 									<div class="col-md-10">Total Assets</div>
-									<div class="col-md-2">123123</div>
+									<div class="col-md-2"><?php echo $totalAssetArr;?></div>
 								</div>
+								<?php
+									}
+								?>
 							</div>
 						</div>
 						<div class="row">
@@ -426,10 +484,16 @@ function parseFSResultSet($result = array()) {
 									<div class="col-md-10">Credit Cards</div>
 									<div class="col-md-2">123123</div>
 								</div>
+								<?php
+									if (isset($notesPayableTotal) && !empty($notesPayableTotal)) {
+								?>
 								<div class="row">
 									<div class="col-md-10">Notes Payable</div>
-									<div class="col-md-2">123123</div>
+									<div class="col-md-2"><?php echo $notesPayableTotal[0]['remaining_amount'];?></div>
 								</div>
+								<?php
+									}
+								?>
 								<div class="row total">
 									<div class="col-md-10">TOTAL LIABILITIES</div>
 									<div class="col-md-2">123123</div>
