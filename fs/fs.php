@@ -1,4 +1,13 @@
 <?php
+/**
+ * TODO :
+ * Need expense sefgregation into 
+ * 	NEcessary
+ *  Lifestyle
+ *  Houseing etc etc
+ *
+ * Month filter
+ */
 require_once('config/config.inc.php');
 
 require_once(DOC_ROOT . '/libs/CommonFunctions.php');
@@ -38,10 +47,66 @@ $mutualFundTotal = !empty($mutualFundTotalArr[0]['current_value']) ? $mutualFund
 $receivablesTotal = !empty($receivablesTotalInfoArr[0]['remaining_amount']) ? $receivablesTotalInfoArr[0]['remaining_amount'] : 0;
 $providentFundTotal = !empty($providentFundTotalArr[0]['current_value']) ? $providentFundTotalArr[0]['current_value'] : 0;
 
+// Housing
+$housingExpenses = 0.00;
+$lifeStyleExpenses = 0.00;
+$expenseArrKey = array(
+			'home_rent',
+			'home_expenses',
+			'maintenance',
+		);
+
+// Life style
+$expenseArrKeyLifeStyle = array(
+			'food',
+			'smoke',
+			'phone_bill',
+			'concerts',
+			'subscriptions',
+		);
+
+foreach ($expenseTypeArr as $expenseType) {
+
+	$expenseTypeName = $expenseType['typeName'];
+
+	if (in_array($expenseTypeName, $expenseArrKey)) {
+		$housingExpenses += $expenseType['totalExpense'];
+	}
+
+	if (in_array($expenseTypeName, $expenseArrKeyLifeStyle)) {
+		$lifeStyleExpenses += $expenseType['totalExpense'];
+	}
+}
+
+$totalIncome = $totalIncome[0]['amount'];
+$totalExpense = $totalExpense[0]['amount'];
+$netMonthlyCashFlow = $totalIncome - $totalExpense;
+
 $totalAssetArr = $bankTotal + $stockTotal + $mutualFundTotal + $receivablesTotal + $providentFundTotal;
 
-function numFormat($num) {
-	return number_format(floatval($num));
+$doodadsTotal = $doodadsTotalArr[0]['amount'];
+
+$bankerAsset = $totalAssetArr + $doodadsTotal;
+$richDadAsset = $totalAssetArr;
+
+$totalLiabilities = $notesPayableTotal[0]['remaining_amount'];
+$netWorthBanker = $bankerAsset - $totalLiabilities;
+$netWorthRichDad = $richDadAsset - $totalLiabilities;
+
+
+// Analysis
+$doYouKeep = $netMonthlyCashFlow / $totalIncome;
+$howMuchHousing = $housingExpenses / $totalIncome;
+$howMuchLifeStyle = $lifeStyleExpenses / $totalIncome;
+$howMuchWealthy = $richDadAsset / $totalExpense;
+$howMuchDoodadSpent = $doodadsTotal / $bankerAsset;
+
+function numFormat($num, $isDecimal = false) {
+	if ($isDecimal) {
+		return number_format(floatval($num), 2);
+	} else {
+		return number_format(floatval($num));
+	}
 }
 
 function parseFSResultSet($result = array()) {
@@ -196,7 +261,7 @@ function parseFSResultSet($result = array()) {
 							<div class="col">
 								<div class="row total">
 									<div class="col-md-10">Total Income</div>
-									<div class="col-md-2"><?php echo numFormat($totalIncome[0]['amount']);?></div>
+									<div class="col-md-2"><?php echo numFormat($totalIncome);?></div>
 								</div>
 							</div>
 						</div>
@@ -229,7 +294,7 @@ function parseFSResultSet($result = array()) {
 							<div class="col">
 								<div class="row subheader">
 									<div class="col-md-10">Total Expenses</div>
-									<div class="col-md-2"><?php echo numFormat($totalExpense[0]['amount']);?></div>
+									<div class="col-md-2"><?php echo numFormat($totalExpense);?></div>
 								</div>
 							</div>
 						</div>
@@ -237,7 +302,7 @@ function parseFSResultSet($result = array()) {
 							<div class="col">
 								<div class="row subheader">
 									<div class="col-md-10">Net Monthly Cash Flow</div>
-									<div class="col-md-2"><?php echo numFormat($totalIncome[0]['amount'] - $totalExpense[0]['amount']);?></div>
+									<div class="col-md-2"><?php echo numFormat($netMonthlyCashFlow);?></div>
 								</div>	
 							</div>
 						</div>
@@ -263,7 +328,7 @@ function parseFSResultSet($result = array()) {
 								</div>
 								<div class="row">
 									<div class="col-md-10">Cash Flow/Total Income</div>
-									<div class="col-md-2">123123</div>
+									<div class="col-md-2"><?php echo numFormat($doYouKeep, true);?></div>
 								</div>
 								<div class="row">
 									<div class="col-md-10">***should be increasing</div>
@@ -274,12 +339,12 @@ function parseFSResultSet($result = array()) {
 						<div class="row">
 							<div class="col">
 								<div class="row subheader">
-									<div class="col-md-10">How Much Do You Keep</div>
+									<div class="col-md-10">Does Your Money Work For You?</div>
 									<div class="col-md-2"></div>
 								</div>
 								<div class="row">
-									<div class="col-md-10">Cash Flow/Total Income</div>
-									<div class="col-md-2">123123</div>
+									<div class="col-md-10">Passive+Portfolio/Total Inc</div>
+									<div class="col-md-2">0.00</div>
 								</div>
 								<div class="row">
 									<div class="col-md-10">***should be increasing</div>
@@ -290,12 +355,72 @@ function parseFSResultSet($result = array()) {
 						<div class="row">
 							<div class="col">
 								<div class="row subheader">
-									<div class="col-md-10">How Much Do You Keep</div>
+									<div class="col-md-10">How Much Do You Pay In Taxes?</div>
 									<div class="col-md-2"></div>
 								</div>
 								<div class="row">
-									<div class="col-md-10">Cash Flow/Total Income</div>
-									<div class="col-md-2">123123</div>
+									<div class="col-md-10">Income Taxes/Total Income</div>
+									<div class="col-md-2">0.00</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<div class="row subheader">
+									<div class="col-md-10">How Much Goes to Housing?</div>
+									<div class="col-md-2"></div>
+								</div>
+								<div class="row">
+									<div class="col-md-10">Housing Expenses/Income</div>
+									<div class="col-md-2"><?php echo numFormat($howMuchHousing, true);?></div>
+								</div>
+								<div class="row">
+									<div class="col-md-10">***keep under 33 percent (Life Style + Housing)</div>
+									<div class="col-md-2"></div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<div class="row subheader">
+									<div class="col-md-10">How Much Goes in to Life Style?</div>
+									<div class="col-md-2"></div>
+								</div>
+								<div class="row">
+									<div class="col-md-10">Life Style Expenses/Income</div>
+									<div class="col-md-2"><?php echo numFormat($howMuchLifeStyle, true);?></div>
+								</div>
+								<div class="row">
+									<div class="col-md-10">***keep under 33 percent  (Life Style + Housing)</div>
+									<div class="col-md-2"></div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<div class="row subheader">
+									<div class="col-md-10">How Much Do You Spend on Doodads?</div>
+									<div class="col-md-2"></div>
+								</div>
+								<div class="row">
+									<div class="col-md-10">Doodad Total/Banker Assets</div>
+									<div class="col-md-2"><?php echo numFormat($howMuchDoodadSpent, true);?></div>
+								</div>
+								<div class="row">
+									<div class="col-md-10">***keep under 33 percent</div>
+									<div class="col-md-2"></div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<div class="row subheader">
+									<div class="col-md-10">What Is Your Annual Return On Assets?</div>
+									<div class="col-md-2"></div>
+								</div>
+								<div class="row">
+									<div class="col-md-10">Pass+Port/Rich Dad Assets</div>
+									<div class="col-md-2">0.00</div>
 								</div>
 								<div class="row">
 									<div class="col-md-10">***should be increasing</div>
@@ -306,15 +431,15 @@ function parseFSResultSet($result = array()) {
 						<div class="row">
 							<div class="col">
 								<div class="row subheader">
-									<div class="col-md-10">How Much Do You Keep</div>
+									<div class="col-md-10">How Wealthy Are You?</div>
 									<div class="col-md-2"></div>
 								</div>
 								<div class="row">
-									<div class="col-md-10">Cash Flow/Total Income</div>
-									<div class="col-md-2">123123</div>
+									<div class="col-md-10">Rich Dad Assets/Expenses</div>
+									<div class="col-md-2"><?php echo numFormat($howMuchWealthy, true);?></div>
 								</div>
 								<div class="row">
-									<div class="col-md-10">***should be increasing</div>
+									<div class="col-md-10">***measured in months</div>
 									<div class="col-md-2"></div>
 								</div>
 							</div>
@@ -429,7 +554,7 @@ function parseFSResultSet($result = array()) {
 								?>
 								<div class="row total">
 									<div class="col-md-10">Total Doodads</div>
-									<div class="col-md-2"><?php echo numFormat($doodadsTotalArr[0]['amount']);?></div>
+									<div class="col-md-2"><?php echo numFormat($doodadsTotal);?></div>
 								</div>
 								<?php
 								}
@@ -440,7 +565,7 @@ function parseFSResultSet($result = array()) {
 							<div class="col">
 								<div class="row subheader">
 									<div class="col-md-10">Total Assets Per Banker</div>
-									<div class="col-md-2">123123</div>
+									<div class="col-md-2"><?php echo numFormat($bankerAsset);?></div>
 								</div>
 								<div class="row">
 									<div class="col-md-10">(Assets Total + Doodads)</div>
@@ -452,7 +577,7 @@ function parseFSResultSet($result = array()) {
 							<div class="col">
 								<div class="row subheader">
 									<div class="col-md-10">TOTAL ASSETS per Rich Dad</div>
-									<div class="col-md-2">123123</div>
+									<div class="col-md-2"><?php echo numFormat($richDadAsset);?></div>
 								</div>
 								<div class="row">
 									<div class="col-md-10">(Assets Total Only, No Doodads)</div>
@@ -480,10 +605,16 @@ function parseFSResultSet($result = array()) {
 									<div class="col-md-10">Liabilities</div>
 									<div class="col-md-2"></div>
 								</div>
+								<?php
+									if (isset($creditCard) && !empty($creditCard)) {
+								?>
 								<div class="row">
 									<div class="col-md-10">Credit Cards</div>
 									<div class="col-md-2">123123</div>
 								</div>
+								<?php
+									}
+								?>
 								<?php
 									if (isset($notesPayableTotal) && !empty($notesPayableTotal)) {
 								?>
@@ -496,7 +627,7 @@ function parseFSResultSet($result = array()) {
 								?>
 								<div class="row total">
 									<div class="col-md-10">TOTAL LIABILITIES</div>
-									<div class="col-md-2">123123</div>
+									<div class="col-md-2"><?php echo numFormat($totalLiabilities);?></div>
 								</div>
 							</div>
 						</div>
@@ -504,7 +635,7 @@ function parseFSResultSet($result = array()) {
 							<div class="col">
 								<div class="row subheader">
 									<div class="col-md-10">NET WORTH per Banker</div>
-									<div class="col-md-2">123123</div>
+									<div class="col-md-2"><?php echo numFormat($netWorthBanker);?></div>
 								</div>
 								<div class="row">
 									<div class="col-md-10">(Total Assets per Banker minus Total Liabilities)</div>
@@ -516,7 +647,7 @@ function parseFSResultSet($result = array()) {
 							<div class="col">
 								<div class="row subheader">
 									<div class="col-md-10">NET WORTH per Rich Dad</div>
-									<div class="col-md-2">123123</div>
+									<div class="col-md-2"><?php echo numFormat($netWorthRichDad);?></div>
 								</div>
 								<div class="row">
 									<div class="col-md-10">(Total Assets per Rich Dad minus Total Liabilities)</div>
