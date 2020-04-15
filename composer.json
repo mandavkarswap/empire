@@ -1,6 +1,7 @@
 {
 		"require": {
-					"sergeytsalkov/meekrodb": "*"
-						}
+					"sergeytsalkov/meekrodb": "*",
+					"smarty/smarty": "~3.1"			
+			   }
 }
 
