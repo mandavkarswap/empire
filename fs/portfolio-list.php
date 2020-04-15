@@ -40,7 +40,7 @@ $tableArr = array(
 // ");
 // UNIION FOR TOTAL FTW
 $result = DB::query("
-(SELECT b.name, a.quantity, SUM(a.transaction_cost) as transaction_cost, (a.transaction_cost/a.quantity) as effective_price FROM sw_fs_stock_transaction_master a LEFT JOIN sw_fs_stock_master b ON a.stock_id = b.id WHERE a.transaction_type='b' GROUP BY name)
+(SELECT b.name, SUM(a.quantity) as quantity, SUM(a.transaction_cost) as transaction_cost, (a.transaction_cost/a.quantity) as effective_price FROM sw_fs_stock_transaction_master a LEFT JOIN sw_fs_stock_master b ON a.stock_id = b.id WHERE a.transaction_type='b' GROUP BY name)
 UNION
 (SELECT 'Total' AS name, SUM(quantity) AS quantity, SUM(transaction_cost) as transaction_cost, '-' as effective_price FROM sw_fs_stock_transaction_master WHERE transaction_type='b');
 ");
